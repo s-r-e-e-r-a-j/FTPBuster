@@ -32,3 +32,18 @@ Install dependencies:
 ```bash
 pip3 install paramiko
 ```
+
+---
+
+### ✅ Required Arguments
+
+| Option               | Description                            |
+|----------------------|----------------------------------------|
+| `-t`, `--target`     | Target IP address or domain            |
+| `-P`, `--protocol`   | Protocol to use: `FTP`, `SFTP`, `FTPS` |
+| `-u`, `--user-file`  | Username wordlist                      |
+| `--user`             | Single username                        |
+| `-p`, `--pass-file`  | Password wordlist                      |
+| `--password`         | Single password                        |
+
+|ℹ️ You must provide either a wordlist or a single value for both username and password.
