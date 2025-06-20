@@ -26,7 +26,7 @@ FTPBrute is a powerful command-line brute-forcing tool designed to brute-force F
 ## Requirements
 
 - Python 3.x
-- `paramiko` module
+- `paramiko` library
 
 Install dependencies:
 ```bash
