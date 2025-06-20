@@ -15,15 +15,15 @@ FTPBrute is a powerful command-line brute-forcing tool designed to brute-force F
 
 ---
 
-##  Supported Protocols
+## Supported Protocols
 
-- ✅ FTP
-- ✅ SFTP (via Paramiko)
-- ✅ FTPS (explicit AUTH TLS only)
+-  FTP
+-  SFTP (via Paramiko)
+-  FTPS (explicit AUTH TLS only)
 
 ---
 
-##  Requirements
+## Requirements
 
 - Python 3.x
 - `paramiko` module
@@ -35,7 +35,7 @@ pip3 install paramiko
 
 ---
 
-### ✅ Required Arguments
+### Required Arguments
 
 | Option               | Description                            |
 |----------------------|----------------------------------------|
@@ -46,4 +46,4 @@ pip3 install paramiko
 | `-p`, `--pass-file`  | Password wordlist                      |
 | `--password`         | Single password                        |
 
-|ℹ️ You must provide either a wordlist or a single value for both username and password.
+> You must provide either a wordlist or a single value for both username and password.
