@@ -51,7 +51,7 @@ sudo python3 install.py
 ```
 **then type `y` for install**
 
-**5. Run the tool**
+**4. Run the tool**
 ```bash
 ftpbuster [options]
 ```
