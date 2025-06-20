@@ -35,6 +35,29 @@ pip3 install paramiko
 
 ---
 
+## installation
+
+**1. Clone the Repository**
+```bash
+git clone https://github.com/s-r-e-e-r-a-j/FTPBuster.git
+```
+**2. Navigate to the FTPBuster directory**
+```bash
+cd FTPBuster
+```
+**3. Run Installer**
+```bash
+sudo python3 install.py
+```
+**then type `y` for install**
+
+**5. Run the tool**
+```bash
+ftpbuster [options]
+```
+
+---
+
 ### Required Arguments
 
 | Option               | Description                            |
