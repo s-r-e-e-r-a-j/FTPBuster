@@ -97,3 +97,18 @@ ftpbuster -t ftp.example.com -P FTPS -u /home/kali/Desktop/user.txt -p /home/kal
 ```
 
 ---
+
+## Uninstallation
+**Run the install.py script**
+```bash
+sudo python3 install.py
+```
+**Then Type `n` for uninstall**
+
+---
+
+## Author
+- **Sreeraj**
+- **GitHub**: https://github.com/s-r-e-e-r-a-j
+
+
