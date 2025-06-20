@@ -4,7 +4,7 @@ FTPBrute is a powerful command-line brute-forcing tool designed to brute-force F
 
 ---
 
-## 🚀 Features
+## Features
 
 - Brute-force support for **FTP**, **SFTP**, and **explicit FTPS (AUTH TLS only)**
 - Supports **single username/password** and **username/password wordlists**
