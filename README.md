@@ -47,3 +47,13 @@ pip3 install paramiko
 | `--password`         | Single password                        |
 
 > You must provide either a wordlist or a single value for both username and password.
+
+### Optional Arguments
+
+| Option         | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `--port`       | Custom port (default: 21 for FTP/FTPS, 22 for SFTP)                         |
+| `--threads`    | Number of threads (default: 10, **max: 50 enforced for better accuracy**)   |
+| `--timeout`    | Timeout in seconds (default: 10)                                            |
+| `--outfile`    | Optional option to save valid credentials to a file                         |
+
