@@ -95,3 +95,5 @@ ftpbuster -t 192.168.1.5 -P SFTP --user root -p /home/kali/Desktop/passwords.txt
 ```bash
 ftpbuster -t ftp.example.com -P FTPS -u /home/kali/Desktop/user.txt -p /home/kali/Desktop/pass.txt --outfile /home/kali/Desktop/valid.txt
 ```
+
+---
