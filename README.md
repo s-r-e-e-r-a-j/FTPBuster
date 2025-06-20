@@ -4,13 +4,6 @@ FTPBrute is a powerful command-line brute-forcing tool designed to brute-force F
 
 ---
 
-## ⚠️ Legal Disclaimer
-FTPBuster is intended for educational and authorized security testing purposes only.
-Unauthorized use of this tool against systems without explicit permission is illegal and strictly prohibited.
-The author is not responsible for any misuse, damage, or legal consequences resulting from the use of this tool.
-
----
-
 ## 🚀 Features
 
 - Brute-force support for **FTP**, **SFTP**, and **explicit FTPS (AUTH TLS only)**
@@ -22,11 +15,10 @@ The author is not responsible for any misuse, damage, or legal consequences resu
 
 ---
 
-## Supported Protocols
-
--  FTP
--  SFTP (via Paramiko)
--  FTPS (explicit AUTH TLS only)
+## ⚠️ Legal Disclaimer
+FTPBuster is intended for educational and authorized security testing purposes only.
+Unauthorized use of this tool against systems without explicit permission is illegal and strictly prohibited.
+The author is not responsible for any misuse, damage, or legal consequences resulting from the use of this tool.
 
 ---
 
