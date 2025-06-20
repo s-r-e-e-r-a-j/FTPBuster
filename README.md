@@ -80,3 +80,18 @@ ftpbuster [options]
 | `--timeout`    | Timeout in seconds (default: 10)                                            |
 | `--outfile`    | Optional option to save valid credentials to a file                         |
 
+---
+
+## Examples
+**FTP with wordlists**
+```bash
+ftpbuster -t 192.168.1.5 -P FTP -u /home/kali/Desktop/users.txt -p /home/kali/Desktop/passwords.txt
+```
+**SFTP with single username**
+```bash
+ftpbuster -t 192.168.1.5 -P SFTP --user root -p /home/kali/Desktop/passwords.txt
+```
+**FTPS with output file**
+```bash
+ftpbuster -t ftp.example.com -P FTPS -u /home/kali/Desktop/user.txt -p /home/kali/Desktop/pass.txt --outfile /home/kali/Desktop/valid.txt
+```
