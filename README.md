@@ -113,10 +113,7 @@ sudo python3 install.py
 ## License
 - **GNU General Public License v3.0**
 
----
 
-## Author
-- **Sreeraj**
-- **GitHub**: https://github.com/s-r-e-e-r-a-j
+
 
 
