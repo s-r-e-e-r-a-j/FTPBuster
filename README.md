@@ -1,6 +1,6 @@
 # FTPBuster
 
-FTPBuster is a powerful command-line brute-forcing tool designed to brute-force FTP, SFTP, and explicit FTPS servers by performing dictionary-based attacks.  
+ FTPBuster is a powerful command-line brute-forcing tool designed to brute-force FTP, SFTP, and explicit FTPS servers by performing dictionary-based attacks. It is intended for **ethical hacking and penetration testing**
 
 ---
 
