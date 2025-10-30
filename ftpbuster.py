@@ -3,7 +3,7 @@
 
 # FTPBuster - Ultimate FTP/SFTP/FTPS Brute Force Tool
 # Developer: Sreeraj
-# https://github.com/s-r-e-e-r-a-j
+# GitHub: https://github.com/s-r-e-e-r-a-j
 
 
 import ftplib
