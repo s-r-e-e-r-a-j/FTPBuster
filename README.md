@@ -92,8 +92,7 @@ ftpbuster [options]
 | `--threads`    | Number of threads (default: 10, **max: 50 enforced for better accuracy**)   |
 | `--timeout`    | Timeout in seconds (default: 10)                                            |
 | `--outfile`    | Optional option to save valid credentials to a file                         |
-
-| `--debug`      | Enable debug output (prints each login attempt result)                     |
+| `--debug`      | Enable debug output (prints each login attempt result)                      |
 
 ---
 
