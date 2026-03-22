@@ -215,8 +215,15 @@ class FTPBuster:
             print(f"{CYAN}[*] Press CTRL+C to stop\n{RESET}")
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
-                futures = {executor.submit(self.try_login, user, pw): (user, pw) for user, pw in credentials[:self.threads * 2]}
-                cred_iter = iter(credentials[self.threads * 2:])
+                cred_iter = iter(credentials)
+                futures = {}
+                for _ in range(self.threads * 2):
+                    try:
+                        user, pw = next(cred_iter)
+                        futures[executor.submit(self.try_login, user, pw)] = (user, pw)
+                    except StopIteration:
+                           break
+
                 last_update = time.time()
 
                 while futures and not self.stop_event.is_set():
