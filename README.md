@@ -31,7 +31,7 @@ Install dependencies:
 ```bash
 pip3 install paramiko
 ```
-**Note for Kali, Parrot, Ubuntu 23.04+ users:**
+**Note for Kali, Parrot, Ubuntu 23.04+, Arch Linux users:**
 
 If you see an error like:
 ```go
